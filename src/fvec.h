@@ -5,8 +5,11 @@
 #include <stdio.h>
 
 #define fvec_get(fvec, index) (fvec->start + index)
+
 #define fvec_set(fvec, val, index) (fvec->start + index = val)
-#define fvec_size(fvec) ((const size_t)(fvec->end - fvec->start))
+
+#define fvec_size(fvec) (fvec->end - fvec->start)
+
 #define fvec_slice(from, to, type, srt_idx, end_idx) (FVec##type*)malloc(sizeof(FVec##type));\
  to->start = from->start + srt_idx;\
 to->alloc_adr = from->alloc_adr;\
@@ -22,22 +25,27 @@ typedef struct {\
 	type* alloc_adr;\
 	type* end;\
 	int8_t (*cmp_func)(type* x, type* y);\
+	size_t chunk_size;\
 } FVec##type;\
-void fvec_new##type(FVec##type* fvec, const size_t size){\
+void fvec_new##type(FVec##type* fvec, const size_t size, const size_t chunk_size){\
 	fvec->start = malloc(sizeof(type) * size);\
 	fvec->end = fvec->start;\
 	fvec->alloc_adr = fvec->start + size - 1;\
+	fvec->chunk_size = chunk_size;\
 }\
 void fvec_resize##type(FVec##type* fvec, const size_t new_size){\
+	const size_t old_size = fvec_size(fvec);\
 	fvec->start = realloc(fvec->start, sizeof(type) * new_size);\
 	fvec->alloc_adr = fvec->start + new_size - 1;\
+	fvec->end = fvec->start + old_size;\
 }\
 \
 FVec##type* fvec_append##type(FVec##type* fvec, const type val){\
-	if (++fvec->end >= fvec->alloc_adr){\
-		fvec_resize##type(fvec, fvec_size(fvec));\
+	if (fvec->end >= fvec->alloc_adr){\
+		fvec_resize##type(fvec, fvec_size(fvec) + fvec->chunk_size);\
 	}\
-	*(fvec->end - 1) = val;\
+	*(fvec->end) = val;\
+	fvec->end++;\
 	return fvec;\
 }\
 void fvec_swap##type(type* elm1, type* elm2){\
@@ -67,16 +75,10 @@ size_t fvec_bfind##type(FVec##type* fvec, type val){\
 		tmp = (end + srt) / 2;\
 		buf = *(fvec->start + tmp);\
 		if (buf == val){\
-			printf("Iterations: %ld\n",\
-					its);\
 			return tmp;\
 		} else if (*(fvec->start + srt) == val){\
-			printf("Iterations: %ld\n",\
-					its);\
 			return srt;\
 		} else if (*(fvec->start + end) == val){\
-			printf("Iterations: %ld\n",\
-					its);\
 			return end;\
 		} else if (fvec->cmp_func(&buf, &val)){\
 			end = tmp;\
@@ -97,7 +99,7 @@ size_t fvec_lfind##type(const FVec##type* fvec, const type val){\
 }\
 const FVec##type* fvec_copy##type(const FVec##type* fvec){\
 	FVec##type* result = NULL;\
-	fvec_new##type(result, fvec_size(fvec));\
+	fvec_new##type(result, fvec_size(fvec), fvec->chunk_size);\
 	for (size_t i = 0; i < fvec_size(fvec); i++){\
 		*(result->start + i) = *(fvec->start + i);\
 	}\
