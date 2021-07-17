@@ -6,7 +6,7 @@
 
 #define fvec_get(fvec, index) (fvec->start + index)
 
-#define fvec_set(fvec, val, index) (fvec->start + index = val)
+#define fvec_set(fvec, val, index) (*(fvec->start + index) = val)
 
 #define fvec_size(fvec) (fvec->end - fvec->start)
 
@@ -68,26 +68,17 @@ void fvec_sort##type(FVec##type* fvec){\
 size_t fvec_bfind##type(FVec##type* fvec, type val){\
 	size_t srt = 0,\
 		end = fvec_size(fvec) - 1,\
-		tmp;\
-	type buf;\
-	size_t its = 0;\
-	while(srt != end){\
-		tmp = (end + srt) / 2;\
-		buf = *(fvec->start + tmp);\
-		if (buf == val){\
-			return tmp;\
-		} else if (*(fvec->start + srt) == val){\
-			return srt;\
-		} else if (*(fvec->start + end) == val){\
-			return end;\
-		} else if (fvec->cmp_func(&buf, &val)){\
-			end = tmp;\
-		} else {\
-			srt = tmp;\
+		tmp = end / 2;\
+	while ((*fvec_get(fvec, tmp) != val && srt <= end)){\
+		if (fvec->cmp_func(fvec_get(fvec, tmp), &val) == 1){\
+			end = tmp - 1;\
 		}\
-		its++;\
+		else {\
+			srt = tmp + 1;\
+		}\
+		tmp = (srt + end) / 2;\
 	}\
-	return fvec_size(fvec);\
+	return tmp;\
 }\
 size_t fvec_lfind##type(const FVec##type* fvec, const type val){\
 	for (size_t i = 0; i < fvec_size(fvec); i++){\
