@@ -3,8 +3,10 @@
 #include <string.h>
 #include <time.h>
 #include "fvec.h"
+#include <assert.h>
 
-#define start_test(test_name) start = clock() / (CLOCKS_PER_SEC / 1000); printf(test_name); printf("...")
+#define start_test(test_name) start = clock() / (CLOCKS_PER_SEC / 1000); printf(test_name); printf("..."); fflush(stdout)
+
 #define show_test() \
 	stop = clock() / (CLOCKS_PER_SEC / 1000);\
 	printf("%d", (stop - start));\
@@ -12,7 +14,7 @@
 
 #define CHUNK_SIZE 1024
 #define PREALOCATED_SIZE 0
-#define VECTOR_SIZE 1000000 / 4
+#define VECTOR_SIZE 1000000000 / 4
 
 fvec_define(int)
 
@@ -53,7 +55,7 @@ int main(size_t argc, char** argv){
 
 	start_test("Percorrendo dados inseridos");
 	for (size_t i = 0; i < fvec_size(vec); i++){
-		*fvec_get(vec, i);
+		fvec_get(vec, i);
 	}
 	show_test();
 
@@ -63,13 +65,13 @@ int main(size_t argc, char** argv){
 
 	start_test("Procurando dados aleatórios com pesquisa binária");
 	for (size_t i = 0; i < fvec_size(vec); i++){
-		*fvec_get(vec, fvec_bfindint(vec, *fvec_get(vec, i)));
+		fvec_get(vec, fvec_bfindint(vec, fvec_get(vec, i)));
 	}
 	show_test();
 
 	start_test("Procurando dados aleatórios com pesquisa linear");
 	for (size_t i = 0; i < fvec_size(vec); i++){
-		*fvec_get(vec, fvec_lfindint(vec, *fvec_get(vec, i)));
+		fvec_get(vec, fvec_lfindint(vec, fvec_get(vec, i))) == fvec_get(vec, i);
 	}
 	show_test();
 
