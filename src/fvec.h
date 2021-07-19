@@ -53,9 +53,10 @@ void fvec_resize##type(FVec##type* fvec, const size_t new_size){\
 FVec##type* fvec_append##type(FVec##type* fvec, const type val){\
 	if (fvec_is_full(fvec)){\
 		fvec_resize##type(fvec, fvec_size(fvec) + fvec->chunk_size);\
+	}\
+	*fvec->end = val;\
 	fvec->end++;\
 	return fvec;\
-	}\
 }\
 \
 void fvec_swap##type(type* elm1, type* elm2){\

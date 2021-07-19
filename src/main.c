@@ -9,7 +9,7 @@
 
 #define show_test() \
 	stop = clock() / (CLOCKS_PER_SEC / 1000);\
-	printf("%d", (stop - start));\
+	printf("%li", (stop - start));\
 	printf("ms\n")
 
 #define CHUNK_SIZE 1024
@@ -23,7 +23,7 @@ int8_t cmp_int(int* x, int* y){
 	return 0;
 }
 
-int main(int argc, char** argv){
+int main(){
 	clock_t start, stop;
 
 	start_test("Iniciando serviço de testes sobre performance para fvec");
@@ -71,7 +71,7 @@ int main(int argc, char** argv){
 
 	start_test("Procurando dados aleatórios com pesquisa linear");
 	for (size_t i = 0; i < fvec_size(vec); i++){
-		fvec_get(vec, fvec_lfindint(vec, fvec_get(vec, i))) == fvec_get(vec, i);
+		fvec_get(vec, fvec_lfindint(vec, fvec_get(vec, i)));
 	}
 	show_test();
 
