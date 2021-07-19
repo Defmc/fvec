@@ -14,12 +14,13 @@
 
 #define CHUNK_SIZE 1024
 #define PREALOCATED_SIZE 0
-#define VECTOR_SIZE 100 / 4
+#define VECTOR_SIZE 10000000
 
 fvec_define(int)
 
 int8_t cmp_int(int* x, int* y){
-	return (*x > *y ? 1 : 0);
+	if (*x > *y) return 1;
+	return 0;
 }
 
 int main(size_t argc, char** argv){
