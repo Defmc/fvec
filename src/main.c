@@ -23,7 +23,7 @@ int8_t cmp_int(int* x, int* y){
 	return 0;
 }
 
-int main(size_t argc, char** argv){
+int main(int argc, char** argv){
 	clock_t start, stop;
 
 	start_test("Iniciando serviço de testes sobre performance para fvec");
