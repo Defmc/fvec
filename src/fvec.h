@@ -58,20 +58,28 @@ void fvec_swap##type(type* elm1, type* elm2){\
 }\
 \
 void fvec_sort##type(FVec##type* fvec){\
-  int  piv, beg[1000], end[1000], i = 0, L, R ;\
+	int  piv, beg[1000], end[1000], i = 0, L, R ;\
 \
-  beg[0] = 0; end[0] = fvec_size(fvec) - 1;\
-  while (i >= 0) {\
-    L = beg[i]; R = end[i] - 1;\
-    if (L < R) {\
-      piv = fvec->start[L];\
-      while (L < R) {\
-        while (fvec_get(fvec, R) >= piv && L < R) R--; if (L < R) fvec->start[L++] = fvec->start[R];\
-        while (fvec_get(fvec, L) <= piv && L < R) L++; if (L < R) fvec->start[R--] = fvec->start[L]; }\
-      fvec->start[L] = piv; beg[i+1] = L+1; end[i+1] = end[i]; end[i++] = L; }\
-    else {\
-      i--; }\
-  }\
+	beg[0] = 0;\
+	end[0] = fvec_size(fvec) - 1;\
+	while (i >= 0) {\
+		L = beg[i];\
+		R = end[i] - 1;\
+		if (L < R) {\
+      			piv = fvec->start[L];\
+			while (L < R) {\
+		        	while (fvec_get(fvec, R) >= piv && L < R) R--; if (L < R) fvec->start[L++] = fvec->start[R];\
+	        		while (fvec_get(fvec, L) <= piv && L < R) L++; if (L < R) fvec->start[R--] = fvec->start[L];\
+			}\
+			fvec->start[L] = piv;\
+			beg[i + 1] = L + 1;\
+			end[i + 1] = end[i];\
+			end[i++] = L;\
+		}\
+		else {\
+		    i--;\
+		}\
+	}\
 }\
 \
 size_t fvec_bfind##type(const FVec##type* fvec, type val){\

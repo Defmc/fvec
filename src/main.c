@@ -30,7 +30,6 @@ int main(size_t argc, char** argv){
 	srand(time(NULL));
 	FVecint* vec = malloc(sizeof(FVecint));
 	fvec_newint(vec, PREALOCATED_SIZE, CHUNK_SIZE);
-	vec->cmp_func = &cmp_int;
 	show_test();
 
 	printf("Dados pré-definidos: \n\
