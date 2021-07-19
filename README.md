@@ -20,4 +20,4 @@ Toda a documentação pode ser conferida no arquivo de [documentação](../blob/
 
 ## Contribuições
 
-Há várias formas de contribuir para o projeto, você pode por exemplo, abrir um [Pull Request](https://github.com/Defmc/fvec/pulls) para contribuições de código. Outras formas disponíveis é por meio de [issues](https://github.com/Defmc/fvec/issues) quanto a utilização da classe e/ou sugestões de implementação de novos recursos ou remodelagem dos já existentes.
+Há várias formas de contribuir para o projeto, você pode por exemplo, abrir um [Pull Request](https://github.com/Defmc/fvec/pulls) para contribuições de código. Outras formas disponíveis é por meio de [Issues](https://github.com/Defmc/fvec/issues) quanto a utilização da classe e/ou sugestões de implementação de novos recursos ou remodelagem dos já existentes.

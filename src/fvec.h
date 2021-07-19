@@ -12,13 +12,14 @@
 
 #define fvec_allocated_size(fvec) ((size_t)(fvec->alloc_adr - fvec->start))
 
-#define fvec_is_full(fvec) (fvec->end == fvec->alloc_adr)
+#define fvec_is_full(fvec) (fvec->end >= fvec->alloc_adr)
 
 #define fvec_is_empty(fvec) (fvec->end == fvec->start)
 
 #define fvec_slice(from, to, type, srt_idx, end_idx) (FVec##type*)malloc(sizeof(FVec##type));\
  to->start = from->start + srt_idx;\
 to->alloc_adr = from->alloc_adr;\
+to->greater_func = from->greater_func;\
 to->end = from->start + end_idx
 
 #define fvec_free(fvec) \
@@ -50,10 +51,8 @@ void fvec_resize##type(FVec##type* fvec, const size_t new_size){\
 }\
 \
 FVec##type* fvec_append##type(FVec##type* fvec, const type val){\
-	if (fvec->end >= fvec->alloc_adr){\
+	if (fvec_is_full(fvec)){\
 		fvec_resize##type(fvec, fvec_size(fvec) + fvec->chunk_size);\
-	}\
-	*(fvec->end) = val;\
 	fvec->end++;\
 	return fvec;\
 }\
