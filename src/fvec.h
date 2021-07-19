@@ -24,15 +24,16 @@ typedef struct {\
 	type* start;\
 	type* alloc_adr;\
 	type* end;\
-	int8_t (*cmp_func)(type* x, type* y);\
+	int8_t (*greater_func)(type* x, type* y);\
 	size_t chunk_size;\
 } FVec##type;\
 \
-void fvec_new##type(FVec##type* fvec, const size_t size, const size_t chunk_size){\
+void fvec_new##type(FVec##type* fvec, int8_t (*greater_func)(type* x, type* y), const size_t size, const size_t chunk_size){\
 	fvec->start = malloc(sizeof(type) * size);\
 	fvec->end = fvec->start;\
 	fvec->alloc_adr = fvec->start + size - 1;\
 	fvec->chunk_size = chunk_size;\
+	fvec->greater_func = greater_func;\
 }\
 \
 void fvec_resize##type(FVec##type* fvec, const size_t new_size){\
@@ -68,8 +69,14 @@ void fvec_sort##type(FVec##type* fvec){\
 		if (L < R) {\
       			piv = fvec->start[L];\
 			while (L < R) {\
-		        	while (fvec_get(fvec, R) >= piv && L < R) R--; if (L < R) fvec->start[L++] = fvec->start[R];\
-	        		while (fvec_get(fvec, L) <= piv && L < R) L++; if (L < R) fvec->start[R--] = fvec->start[L];\
+		        	while ((fvec->greater_func(fvec->start + R, &piv) || fvec_get(fvec, R) == piv) && L < R)\
+					R--;\
+					if (L < R)\
+					fvec->start[L++] = fvec->start[R];\
+	        		while ((!fvec->greater_func(fvec->start + L, &piv) || fvec_get(fvec, L) == piv) && L < R)\
+					L++;\
+					if (L < R)\
+						fvec->start[R--] = fvec->start[L];\
 			}\
 			fvec->start[L] = piv;\
 			beg[i + 1] = L + 1;\
@@ -87,7 +94,7 @@ size_t fvec_bfind##type(const FVec##type* fvec, type val){\
 		end = fvec_size(fvec) - 1,\
 		tmp = end / 2;\
 	while ((fvec_get(fvec, tmp) != val && srt <= end)){\
-		if (fvec->cmp_func(fvec->start + tmp, &val) == 1){\
+		if (fvec->greater_func(fvec->start + tmp, &val) == 1){\
 			end = tmp - 1;\
 		}\
 		else {\
@@ -109,7 +116,7 @@ size_t fvec_lfind##type(const FVec##type* fvec, const type val){\
 \
 const FVec##type* fvec_copy##type(const FVec##type* fvec){\
 	FVec##type* result = NULL;\
-	fvec_new##type(result, fvec_size(fvec), fvec->chunk_size);\
+	fvec_new##type(result, fvec->greater_func, fvec_size(fvec), fvec->chunk_size);\
 	for (size_t i = 0; i < fvec_size(fvec); i++){\
 		*(result->start + i) = *(fvec->start + i);\
 	}\

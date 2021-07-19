@@ -14,7 +14,7 @@
 
 #define CHUNK_SIZE 1024
 #define PREALOCATED_SIZE 0
-#define VECTOR_SIZE 1000000000 / 4
+#define VECTOR_SIZE 100 / 4
 
 fvec_define(int)
 
@@ -29,7 +29,7 @@ int main(size_t argc, char** argv){
 
 	srand(time(NULL));
 	FVecint* vec = malloc(sizeof(FVecint));
-	fvec_newint(vec, PREALOCATED_SIZE, CHUNK_SIZE);
+	fvec_newint(vec, &cmp_int, PREALOCATED_SIZE, CHUNK_SIZE);
 	show_test();
 
 	printf("Dados pré-definidos: \n\
