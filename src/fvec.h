@@ -55,6 +55,7 @@ FVec##type* fvec_append##type(FVec##type* fvec, const type val){\
 		fvec_resize##type(fvec, fvec_size(fvec) + fvec->chunk_size);\
 	fvec->end++;\
 	return fvec;\
+	}\
 }\
 \
 void fvec_swap##type(type* elm1, type* elm2){\
