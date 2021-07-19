@@ -12,11 +12,11 @@ Após isso, basta utilizar todas as funções geradas de modo a acrescentar o no
 
 ## Garantindo que a implementação para um tipo de fvec não ocorra duas vezes
 
-~~(Ainda em produção)~~ Não é necessário nenhum tipo de interferência na declaração da mesma, a própria macro `fvec_define` se encarrega de gerenciar as chamadas duplicadas para definição de uma mesma implementação.
+Para garantir que não haverão chamadas duplicadas em relação a definição de fvec para novos tipos, basta utilizar um `header guard` em um arquivo onde conteria todas as definições (algo como `fvec_impl.h`).
 
 ## Documentação
 
-~~(Ainda em produção)~~ Toda a documentação pode ser conferida no arquivo de [documentação](../blob/master/doc.md) do repositório.
+Toda a documentação pode ser conferida no arquivo de [documentação](../blob/master/doc.md) do repositório. Em caso de dúvidas, você também pode me convocar no Discord pelo usuário `Defmc#2687`.
 
 ## Contribuições
 
