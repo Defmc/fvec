@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include <string.h>
 #include <time.h>
 #include "fvec.h"
-#include <assert.h>
 
 #define start_test(test_name) start = clock() / (CLOCKS_PER_SEC / 1000); printf(test_name); printf("..."); fflush(stdout)
 
