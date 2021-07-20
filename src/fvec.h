@@ -121,12 +121,11 @@ size_t fvec_lfind##type(const FVec##type* fvec, const type val){\
 	return fvec_size(fvec);\
 }\
 \
-const FVec##type* fvec_copy##type(const FVec##type* from,\
+FVec##type* fvec_copy##type(const FVec##type* from,\
 		const size_t srt,\
 		const size_t end){\
-	FVec##type* result = NULL;\
-	FVec##type* to_copy;\
-	fvec_slice(from, to_copy, type, srt, end);\
+	FVec##type* result = malloc(sizeof(FVecint));\
+	FVec##type* to_copy = fvec_slice(from, to_copy, type, srt, end);\
 	fvec_new##type(result, to_copy->greater_func, fvec_size(to_copy), to_copy->chunk_size);\
 	for (size_t i = 0; i < fvec_size(to_copy); i++){\
 		fvec_get(result, i) = fvec_get(to_copy, i);\

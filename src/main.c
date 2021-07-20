@@ -14,7 +14,8 @@
 
 #define CHUNK_SIZE 1024
 #define PREALOCATED_SIZE 0
-#define VECTOR_SIZE 10000000
+#define VECTOR_SIZE 100000
+#define VECTOR_COPY_SIZE 100000
 
 fvec_define(int)
 
@@ -36,10 +37,12 @@ int main(){
 	printf("Dados pré-definidos: \n\
 	Tamanho dos blocos de alocação: %d\n\
 	Elementos pré-alocados: %d\n\
-	Tamanho do vetor: %d\n\n",
+	Tamanho do vetor: %d\n\
+	Tamanho do vetor copiado: %d\n\n",
 		CHUNK_SIZE,
 		PREALOCATED_SIZE,
-		VECTOR_SIZE);
+		VECTOR_SIZE,
+		VECTOR_COPY_SIZE);
 
 	start_test("Incrementando elementos ao vetor");
 	for (size_t i = 0; i < VECTOR_SIZE; i++){
@@ -69,10 +72,18 @@ int main(){
 	}
 	show_test();
 
-	start_test("Procurando dados aleatórios com pesquisa linear");
-	for (size_t i = 0; i < fvec_size(vec); i++){
-		fvec_get(vec, fvec_lfindint(vec, fvec_get(vec, i)));
+	start_test("Copiando elementos do vetor principal");
+	FVecint* copied_vec = fvec_copyint(vec, 0, VECTOR_COPY_SIZE);
+	show_test();
+
+	start_test("Verificando valores do vetor cópia com pesquisa linear");
+	for (size_t i = 0; i < fvec_size(copied_vec); i++){
+		fvec_lfindint(copied_vec, fvec_get(copied_vec, i));
 	}
+	show_test();
+
+	start_test("Liberando memória do vetor cópia");
+	fvec_free(copied_vec);
 	show_test();
 
 	start_test("Liberando memória do vetor");
