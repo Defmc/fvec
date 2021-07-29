@@ -60,6 +60,11 @@ FVec##type* fvec_append##type(FVec##type* fvec, const type val){\
 	fvec->end++;\
 	return fvec;\
 }\
+void fvec_appendfvec##type(FVec##type* base, FVec##type* to_copy){\
+	for (size_t i = 0; i < fvec_size(to_copy); i++){\
+		fvec_append##type(base, fvec_get(to_copy, i));\
+	}\
+}\
 \
 void fvec_swap##type(type* elm1, type* elm2){\
 	const type buff = *elm1;\
