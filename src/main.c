@@ -17,10 +17,20 @@
 #define VECTOR_SIZE 100000
 #define VECTOR_COPY_SIZE 100000
 
-fvec_define(int)
+typedef struct{
+	int n;
+	char c;
+} Test;
 
-int8_t cmp_int(int* x, int* y){
-	if (*x > *y) return 1;
+fvec_define(Test)
+
+int8_t cmp_Test(Test* x, Test* y){
+	if (x->n > y->n) return 1;
+	return 0;
+}
+
+int8_t cmp_equal_Test(Test* x, Test* y){
+	if (x->n == y->n && x->c == y->c) return 1;
 	return 0;
 }
 
@@ -30,8 +40,8 @@ int main(){
 	start_test("Iniciando serviço de testes sobre performance para fvec");
 
 	srand(time(NULL));
-	FVecint* vec = malloc(sizeof(FVecint));
-	fvec_newint(vec, &cmp_int, PREALOCATED_SIZE, CHUNK_SIZE);
+	FVecTest* vec = malloc(sizeof(FVecTest));
+	fvec_newTest(vec, &cmp_Test, &cmp_equal_Test, PREALOCATED_SIZE, CHUNK_SIZE);
 	show_test();
 
 	printf("Dados pré-definidos: \n\
@@ -46,13 +56,13 @@ int main(){
 
 	start_test("Incrementando elementos ao vetor");
 	for (size_t i = 0; i < VECTOR_SIZE; i++){
-		fvec_appendint(vec, 0);
+		fvec_appendTest(vec, ((Test){.n = 0, .c = ' '}));
 	}
 	show_test();
 
 	start_test("Definindo valor dos elementos");
 	for (size_t i = 0; i < VECTOR_SIZE; i++){
-		fvec_set(vec, rand(), i);
+		fvec_set(vec, ((Test){.n = rand(), .c = ' '}), i);
 	}
 	show_test();
 
@@ -63,22 +73,22 @@ int main(){
 	show_test();
 
 	start_test("Ordenando dados de pós-alocação");
-	fvec_sortint(vec);
+	fvec_sortTest(vec);
 	show_test();
 
 	start_test("Procurando dados aleatórios com pesquisa binária");
 	for (size_t i = 0; i < fvec_size(vec); i++){
-		fvec_get(vec, fvec_bfindint(vec, fvec_get(vec, i)));
+		fvec_get(vec, fvec_bfindTest(vec, fvec_get(vec, i)));
 	}
 	show_test();
 
 	start_test("Copiando elementos do vetor principal");
-	FVecint* copied_vec = fvec_copyint(vec, 0, VECTOR_COPY_SIZE);
+	FVecTest* copied_vec = fvec_copyTest(vec, 0, VECTOR_COPY_SIZE);
 	show_test();
 
 	start_test("Verificando valores do vetor cópia com pesquisa linear");
 	for (size_t i = 0; i < fvec_size(copied_vec); i++){
-		fvec_lfindint(copied_vec, fvec_get(copied_vec, i));
+		fvec_lfindTest(copied_vec, fvec_get(copied_vec, i));
 	}
 	show_test();
 
