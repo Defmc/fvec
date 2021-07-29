@@ -66,7 +66,7 @@ void fvec_swap##type(type* elm1, type* elm2){\
 }\
 \
 void fvec_sort##type(FVec##type* fvec){\
-	int  piv, beg[1000], end[1000], i = 0, L, R ;\
+	type  piv, beg[1000], end[1000], i = 0, L, R ;\
 \
 	beg[0] = 0;\
 	end[0] = fvec_size(fvec) - 1;\
@@ -124,7 +124,7 @@ size_t fvec_lfind##type(const FVec##type* fvec, const type val){\
 FVec##type* fvec_copy##type(const FVec##type* from,\
 		const size_t srt,\
 		const size_t end){\
-	FVec##type* result = malloc(sizeof(FVecint));\
+	FVec##type* result = malloc(sizeof(FVec##type));\
 	FVec##type* to_copy = fvec_slice(from, to_copy, type, srt, end);\
 	fvec_new##type(result, to_copy->greater_func, fvec_size(to_copy), to_copy->chunk_size);\
 	for (size_t i = 0; i < fvec_size(to_copy); i++){\
