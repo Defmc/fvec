@@ -20,7 +20,9 @@
  to->start = from->start + srt_idx;\
 to->alloc_adr = from->alloc_adr;\
 to->greater_func = from->greater_func;\
-to->end = from->start + end_idx
+to->equal_func = from->equal_func;\
+to->end = from->start + end_idx;\
+to->chunk_size = from->chunk_size;
 
 #define fvec_free(fvec) \
 	free(fvec->start);\
@@ -138,6 +140,7 @@ FVec##type* fvec_copy##type(const FVec##type* from,\
 	for (size_t i = 0; i < fvec_size(to_copy); i++){\
 		fvec_get(result, i) = fvec_get(to_copy, i);\
 	}\
+	result->end = result->start + (end - srt);\
 	return result;\
 }
 

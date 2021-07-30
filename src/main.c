@@ -15,7 +15,7 @@
 #define CHUNK_SIZE 1024
 #define PREALOCATED_SIZE 0
 #define VECTOR_SIZE 100000
-#define VECTOR_COPY_SIZE 100000
+#define VECTOR_COPY_SIZE 100
 
 typedef struct{
 	int n;
