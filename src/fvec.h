@@ -38,7 +38,7 @@ typedef struct {\
 	size_t chunk_size;\
 } FVec##type;\
 \
-void fvec_new##type(FVec##type* fvec, int8_t (*greater_func)(type* x, type* y), int8_t (*equal_func)(type* x, type* y), const size_t size, const size_t chunk_size){\
+static void fvec_new##type(FVec##type* fvec, int8_t (*greater_func)(type* x, type* y), int8_t (*equal_func)(type* x, type* y), const size_t size, const size_t chunk_size){\
 	fvec->start = malloc(sizeof(type) * size);\
 	fvec->end = fvec->start;\
 	fvec->alloc_adr = fvec->start + size - 1;\
@@ -47,7 +47,7 @@ void fvec_new##type(FVec##type* fvec, int8_t (*greater_func)(type* x, type* y), 
 	fvec->equal_func = equal_func;\
 }\
 \
-void fvec_resize##type(FVec##type* fvec, const size_t new_size){\
+static void fvec_resize##type(FVec##type* fvec, const size_t new_size){\
 	const size_t old_size = fvec_size(fvec);\
 	fvec->start = realloc(fvec->start, sizeof(type) * new_size);\
 	fvec->alloc_adr = fvec->start + new_size - 1;\
@@ -62,19 +62,19 @@ FVec##type* fvec_append##type(FVec##type* fvec, const type val){\
 	fvec->end++;\
 	return fvec;\
 }\
-void fvec_appendfvec##type(FVec##type* base, FVec##type* to_copy){\
+static void fvec_appendfvec##type(FVec##type* base, FVec##type* to_copy){\
 	for (size_t i = 0; i < fvec_size(to_copy); i++){\
 		fvec_append##type(base, fvec_get(to_copy, i));\
 	}\
 }\
 \
-void fvec_swap##type(type* elm1, type* elm2){\
+static void fvec_swap##type(type* elm1, type* elm2){\
 	const type buff = *elm1;\
 	*elm1 = *elm2;\
 	*elm2 = buff;\
 }\
 \
-void fvec_sort##type(FVec##type* fvec){\
+static void fvec_sort##type(FVec##type* fvec){\
 	type piv;\
 	int beg[1000], end[1000], i = 0, L, R ;\
 \
@@ -106,7 +106,7 @@ void fvec_sort##type(FVec##type* fvec){\
 	}\
 }\
 \
-size_t fvec_bfind##type(const FVec##type* fvec, type val){\
+static size_t fvec_bfind##type(const FVec##type* fvec, type val){\
 	size_t srt = 0,\
 		end = fvec_size(fvec) - 1,\
 		tmp = end / 2;\
@@ -122,7 +122,7 @@ size_t fvec_bfind##type(const FVec##type* fvec, type val){\
 	return tmp;\
 }\
 \
-size_t fvec_lfind##type(const FVec##type* fvec, const type val){\
+static size_t fvec_lfind##type(const FVec##type* fvec, const type val){\
 	for (size_t i = 0; i < fvec_size(fvec); i++){\
 		if (fvec->equal_func(fvec->start + i, &val) == 1){\
 			return i;\
@@ -131,7 +131,7 @@ size_t fvec_lfind##type(const FVec##type* fvec, const type val){\
 	return fvec_size(fvec);\
 }\
 \
-FVec##type* fvec_copy##type(const FVec##type* from,\
+static FVec##type* fvec_copy##type(const FVec##type* from,\
 		const size_t srt,\
 		const size_t end){\
 	FVec##type* result = malloc(sizeof(FVec##type));\
